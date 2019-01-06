@@ -1,5 +1,8 @@
 package local.spiritkill;
-import java.io.Serializable;
+import java.io.*;
+import java.util.Map;
+import java.util.HashMap;
+import java.time.LocalDate;
 
 
 public class SpiritKill {
@@ -7,6 +10,12 @@ public class SpiritKill {
 	public static final void main (String... args) {
 		
 		System.out.println("Test");
+
+		Stats theInstance = new Stats();
+		theInstance.printStats();
+		theInstance.enterAndCalcAlcoMock("2018", 2000.12f);
+		theInstance.printStats();
+		theInstance.serialize(theInstance);
 	}
 }
 
@@ -17,9 +26,9 @@ class Stats implements Serializable {
 
 	Stats () {
 		File serializedStats = new File("Stats.ser");
-		if (!tmpDir.exists()) {
+		if (!serializedStats.exists()) {
 			LocalDate date = LocalDate.now();
-			drunkWeeks.put(date.getYear(), null);
+			drunkWeeks.put(Integer.toString(date.getYear()), null);
 
 		} else {
 			Stats deserialized = null;
@@ -41,6 +50,27 @@ class Stats implements Serializable {
 		}
 	}
 
-	public enterAndCalcAlco () {}
+	public void enterAndCalcAlco () {}
+
+	public void enterAndCalcAlcoMock (String year, Float promille) {
+		drunkWeeks.put(year, promille);
+	}
+
+	public void printStats () {
+		drunkWeeks.forEach((k, v) -> System.out.println(k + " " + v));
+	}
+
+	public void serialize (Stats toBeSerialized) {
+		try {
+         		FileOutputStream fileOut = new FileOutputStream("Stats.ser");
+         		ObjectOutputStream out = new ObjectOutputStream(fileOut);
+         		out.writeObject(toBeSerialized);
+         		out.close();
+         		fileOut.close();
+         		System.out.printf("Serialized data is saved in Stats.ser");
+      		} catch (IOException i) {
+         		i.printStackTrace();
+      		}
+	}
 
 }
