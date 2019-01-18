@@ -39,7 +39,7 @@ class Stats implements Serializable {
          			deserialized = (Stats) in.readObject();
          			in.close();
          			fileIn.close();
-				this.thoseWeeks = deserialized.drunkWeeks;
+				this.thoseWeeks = deserialized.thoseWeeks;
 				deserialized = null;
 				System.gc();
       			} catch (IOException i) {
