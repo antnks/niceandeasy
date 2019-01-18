@@ -1,10 +1,10 @@
 package local.niceandeasy;
+
 import java.io.*;
 import java.util.Map;
 import java.util.HashMap;
 import java.time.LocalDate;
 
-/it's a comment
 
 public class NiceAndEasy {
 
@@ -14,7 +14,7 @@ public class NiceAndEasy {
 
 		Stats theInstance = new Stats();
 		theInstance.printStats();
-		theInstance.enterAndCalcAlcoMock("2018", 2000.12f);
+		theInstance.enterAndCalcItMock("2018", 2000.12f);
 		theInstance.printStats();
 		theInstance.serialize(theInstance);
 	}
@@ -23,13 +23,13 @@ public class NiceAndEasy {
 class Stats implements Serializable {
 	
 	
-	private Map <String, Float> drunkWeeks = new HashMap<>();
+	private Map <String, Float> thoseWeeks = new HashMap<>();
 
 	Stats () {
 		File serializedStats = new File("Stats.ser");
 		if (!serializedStats.exists()) {
 			LocalDate date = LocalDate.now();
-			drunkWeeks.put(Integer.toString(date.getYear()), null);
+			thoseWeeks.put(Integer.toString(date.getYear()), null);
 
 		} else {
 			Stats deserialized = null;
@@ -39,7 +39,7 @@ class Stats implements Serializable {
          			deserialized = (Stats) in.readObject();
          			in.close();
          			fileIn.close();
-				this.drunkWeeks = deserialized.drunkWeeks;
+				this.thoseWeeks = deserialized.drunkWeeks;
 				deserialized = null;
 				System.gc();
       			} catch (IOException i) {
@@ -51,14 +51,14 @@ class Stats implements Serializable {
 		}
 	}
 
-	public void enterAndCalcAlco () {}
+	public void enterAndCalcIt () {}
 
-	public void enterAndCalcAlcoMock (String year, Float promille) {
-		drunkWeeks.put(year, promille);
+	public void enterAndCalcItMock (String year, Float promille) {
+		thoseWeeks.put(year, promille);
 	}
 
 	public void printStats () {
-		drunkWeeks.forEach((k, v) -> System.out.println(k + " " + v));
+		thoseWeeks.forEach((k, v) -> System.out.println(k + " " + v));
 	}
 
 	public void serialize (Stats toBeSerialized) {
