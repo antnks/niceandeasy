@@ -7,6 +7,9 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.HashMap;
 import java.time.LocalDate;
+import java.time.format.*;
+import java.time.temporal.IsoFields;
+
 
 
 public class NiceAndEasy {
@@ -18,13 +21,28 @@ public class NiceAndEasy {
 		if (console == null) throw new RuntimeException ("No console on this sytem, exiting!");
 
 		String dateToTest = console.readLine("Enter a date YYYYMMDD\n");
-		System.out.println(dateToTest);
+		float ml = (float) Double.parseDouble((console.readLine("Enter ml\n")));
+		float percent = (float) Double.parseDouble((console.readLine("Enter percent\n")));
+		float realMl = ml * percent / 100;
+		DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyyMMdd");
+		LocalDate date = LocalDate.parse(dateToTest, f);
+
+		int week = date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+		int weekYear = date.get(IsoFields.WEEK_BASED_YEAR);
+
+		//System.out.println("Date: " + date + ", week: " + week + ", year: " + weekYear + ", ml: " + ml + ", percent: " + percent + ", realMl: " + realMl);
 
 
 		Stats theInstance = new Stats();
 		theInstance.printStats();
-		theInstance.enterAndCalcItMock("2018", 2000.12f);
+		theInstance.enterAndCalcItMock("" + weekYear + "_" + week, realMl);
 		theInstance.printStats();
+		
+
+
+
+
+
 		theInstance.serialize(theInstance);
 	}
 }
@@ -56,25 +74,25 @@ class Stats implements Serializable {
 		}
 	}
 
-	public void enterAndCalcIt () {}
+public void enterCalcStore () {}
 
-	public void enterAndCalcItMock (String year, Float promille) {
-		thoseWeeks.put(year, promille);
-	}
+public void enterAndCalcItMock (String year, Float promille) {
+	thoseWeeks.put(year, promille);
+}
 
-	public void printStats () {
-		thoseWeeks.forEach((k, v) -> System.out.println(k + " " + v));
-	}
+public void printStats () {
+	thoseWeeks.forEach((k, v) -> System.out.println(k + " " + v));
+}
 
-	public void serialize (Stats toBeSerialized) {
-		try {
-			ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(Paths.get("Stats.ser")));
-         		out.writeObject(toBeSerialized);
-         		out.close();
-         		System.out.println("Serialized data is saved in Stats.ser");
-      		} catch (IOException i) {
-         		i.printStackTrace();
-      		}
+public void serialize (Stats toBeSerialized) {
+	try {
+		ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(Paths.get("Stats.ser")));
+       		out.writeObject(toBeSerialized);
+       		out.close();
+       		System.out.println("Serialized data is saved in Stats.ser");
+	} catch (IOException i) {
+       		i.printStackTrace();
 	}
+}
 
 }
