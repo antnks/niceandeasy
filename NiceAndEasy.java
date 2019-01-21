@@ -1,6 +1,9 @@
 package local.niceandeasy;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.HashMap;
 import java.time.LocalDate;
@@ -10,7 +13,13 @@ public class NiceAndEasy {
 
 	public static final void main (String... args) {
 		
-		System.out.println("Test");
+
+		Console console = System.console();
+		if (console == null) throw new RuntimeException ("No console on this sytem, exiting!");
+
+		String dateToTest = console.readLine("Enter a date YYYYMMDD\n");
+		System.out.println(dateToTest);
+
 
 		Stats theInstance = new Stats();
 		theInstance.printStats();
@@ -23,25 +32,21 @@ public class NiceAndEasy {
 class Stats implements Serializable {
 	
 	
+	private static final long serialVersionUID = 1L;
+
 	private Map <String, Float> thoseWeeks = new HashMap<>();
 
 	Stats () {
-		File serializedStats = new File("Stats.ser");
-		if (!serializedStats.exists()) {
+		Path serializedStats = Paths.get("Stats.ser");
+		if (!Files.exists(serializedStats)) {
 			LocalDate date = LocalDate.now();
 			thoseWeeks.put(Integer.toString(date.getYear()), null);
 
 		} else {
-			Stats deserialized = null;
 			try {
-				FileInputStream fileIn = new FileInputStream("Stats.ser");
-         			ObjectInputStream in = new ObjectInputStream(fileIn);
-         			deserialized = (Stats) in.readObject();
+         			ObjectInputStream in = new ObjectInputStream(Files.newInputStream(Paths.get("Stats.ser")));
+				this.thoseWeeks = ((Stats) in.readObject()).thoseWeeks;
          			in.close();
-         			fileIn.close();
-				this.thoseWeeks = deserialized.thoseWeeks;
-				deserialized = null;
-				System.gc();
       			} catch (IOException i) {
 				i.printStackTrace();
 			} catch (ClassNotFoundException c) {
@@ -63,12 +68,10 @@ class Stats implements Serializable {
 
 	public void serialize (Stats toBeSerialized) {
 		try {
-         		FileOutputStream fileOut = new FileOutputStream("Stats.ser");
-         		ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(Paths.get("Stats.ser")));
          		out.writeObject(toBeSerialized);
          		out.close();
-         		fileOut.close();
-         		System.out.printf("Serialized data is saved in Stats.ser");
+         		System.out.println("Serialized data is saved in Stats.ser");
       		} catch (IOException i) {
          		i.printStackTrace();
       		}
