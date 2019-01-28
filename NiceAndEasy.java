@@ -36,25 +36,29 @@ class Stats implements Serializable {
 		Path serializedStats = Paths.get("Stats.ser");
 		if (!Files.exists(serializedStats)) {
 			return;
-		} else {
+		}
+		else {
 			try {
-         			ObjectInputStream in = new ObjectInputStream(Files.newInputStream(serializedStats));
+				ObjectInputStream in = new ObjectInputStream(Files.newInputStream(serializedStats));
 				this.thoseWeeks = ((Stats) in.readObject()).thoseWeeks;
-         			in.close();
-      			} catch (IOException i) {
+				in.close();
+			}
+			catch (IOException i) {
 				i.printStackTrace();
 			} catch (ClassNotFoundException c) {
 				System.out.println("Stats class not found");
-         			c.printStackTrace();
+				c.printStackTrace();
 			}
 		}
 	}
 
 	public void enterCalcStore () {
 
-                	Console console = System.console();
-                	if (console == null) throw new RuntimeException ("No console on this sytem, exiting!");
-			if (console.readLine("Enter \"s\" if you only want statistics\n").equals("s")) return;
+			Console console = System.console();
+			if (console == null)
+				throw new RuntimeException ("No console on this sytem, exiting!");
+			if (console.readLine("Enter \"s\" if you only want statistics\n").equals("s"))
+				return;
 
 			while (true) {
 
@@ -66,32 +70,38 @@ class Stats implements Serializable {
 				float ml = 0;
 				float percent = 0;
 
-                		try {
+				try {
 					ml = (float) Double.parseDouble(parts[0]);
 					percent = (float) Double.parseDouble(parts[1]);
 				}
-				catch (NumberFormatException|ArrayIndexOutOfBoundsException e) {System.out.println("\nenter at least 2 comma-separated numbers for ml and percent, bitch\n"); continue; }
+				catch (NumberFormatException|ArrayIndexOutOfBoundsException e) {
+					System.out.println("\nenter at least 2 comma-separated numbers for ml and percent, bitch\n");
+					continue;
+				}
 				//chacking validity associating the date (now or provided by user) to ISO week-based--year and week of week-based-year
 				String yearWeek = null;
 				LocalDate date = null;
 
-				if (parts.length == 2) date = LocalDate.now();
+				if (parts.length == 2)
+					date = LocalDate.now();
 				else {
 					try {
-						DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyyMMdd"); date = LocalDate.parse(parts[2], f);
+						DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyyMMdd");
+						date = LocalDate.parse(parts[2], f);
 					} catch (DateTimeParseException d) {
 						System.out.println("\nenter a valid date of format yyyymmdd, bitch\n");
 						continue;
 					}
 				}
-                                
+
 				int week = date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
-                        	int weekYear = date.get(IsoFields.WEEK_BASED_YEAR);
+				int weekYear = date.get(IsoFields.WEEK_BASED_YEAR);
 
-                        	yearWeek = "" + weekYear + "_" + week;
+				yearWeek = "" + weekYear + "_" + week;
 
-				if (!console.readLine("You entered: ml: " + ml + ", percent: " + percent + ", ISOyear_week: " + yearWeek + ", OK to write to DB? (y/n)\n").equals("y")) break;
-                	
+				if (!console.readLine("You entered: ml: " + ml + ", percent: " + percent + ", ISOyear_week: " + yearWeek + ", OK to write to DB? (y/n)\n").equals("y"))
+					break;
+
 
 				//calculating ethyl ml
 				float realMl = ml * percent / 100;
@@ -99,9 +109,14 @@ class Stats implements Serializable {
 				if (thoseWeeks.containsKey("" + weekYear + "_" + week)) {
 					//adding up ethyl ml if year_week is already in the DB
 					thoseWeeks.put("" + weekYear + "_" + week, realMl + thoseWeeks.get("" + weekYear + "_" + week));
-				} else thoseWeeks.put("" + weekYear + "_" + week, realMl);
+				}
+				else
+					thoseWeeks.put("" + weekYear + "_" + week, realMl);
 
-				if (console.readLine("One more drink? (y/n)\n").equals("y")) continue; else break;
+				if (console.readLine("One more drink? (y/n)\n").equals("y"))
+					continue;
+				else
+					break;
 			}
 
 	}
@@ -118,10 +133,11 @@ class Stats implements Serializable {
 	public void serialize (Stats toBeSerialized) {
 		try {
 			ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(Paths.get("Stats.ser")));
-       			out.writeObject(toBeSerialized);
-       			out.close();
-		} catch (IOException i) {
-       			i.printStackTrace();
+			out.writeObject(toBeSerialized);
+			out.close();
+		}
+		catch (IOException i) {
+			i.printStackTrace();
 		}
 	}
 
