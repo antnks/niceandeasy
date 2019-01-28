@@ -40,22 +40,22 @@ class Stats implements Serializable {
 
 	Stats () {
 		Path serializedStats = Paths.get("Stats.ser");
-		if (!Files.exists(serializedStats)) {
+		if (!Files.exists(serializedStats))
 			return;
+
+		try {
+			ObjectInputStream in = new ObjectInputStream(Files.newInputStream(serializedStats));
+			this.thoseWeeks = ((Stats) in.readObject()).thoseWeeks;
+			in.close();
 		}
-		else {
-			try {
-				ObjectInputStream in = new ObjectInputStream(Files.newInputStream(serializedStats));
-				this.thoseWeeks = ((Stats) in.readObject()).thoseWeeks;
-				in.close();
-			}
-			catch (IOException i) {
-				i.printStackTrace();
-			} catch (ClassNotFoundException c) {
-				System.out.println("Stats class not found");
-				c.printStackTrace();
-			}
+		catch (IOException i) {
+			i.printStackTrace();
 		}
+		catch (ClassNotFoundException c) {
+			System.out.println("Stats class not found");
+			c.printStackTrace();
+		}
+
 	}
 
 	public void enterCalcStore () {
