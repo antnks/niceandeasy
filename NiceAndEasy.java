@@ -17,10 +17,16 @@ public class NiceAndEasy {
 	public static final void main (String[] args) {
 		
 		Stats theInstance = new Stats();
-		//main method with infinite loop controlling console input, calculating ethyl alcohol quantity, storing data to DB
+
+		/*
+		main method with infinite loop controlling console input,
+		calculating ethyl alcohol quantity, storing data to DB
+		*/
 		theInstance.enterCalcStore();
+
 		//output DB to console
 		theInstance.printStats();
+
 		//DB is implemented via object serialization
 		theInstance.serialize(theInstance);
 	}
@@ -63,7 +69,9 @@ class Stats implements Serializable {
 			while (true) {
 
 				//reading data from console
-				String entry = console.readLine("Enter \"ml,percentAlcohol\" for today OR \"ml,percentAlcohol,Date(yyyymmdd)\"\nTo adjust DB entries use negative ml values\n\n");
+				String entry = console.readLine("Enter \"ml,percentAlcohol\" for today OR " +
+					"\"ml,percentAlcohol,Date(yyyymmdd)\"\n" +
+					"To adjust DB entries use negative ml values\n\n");
 				String parts [] = entry.split(",");
 
 				//extracting individual parts of data, checking validity of input
@@ -78,7 +86,10 @@ class Stats implements Serializable {
 					System.out.println("\nenter at least 2 comma-separated numbers for ml and percent, bitch\n");
 					continue;
 				}
-				//chacking validity associating the date (now or provided by user) to ISO week-based--year and week of week-based-year
+				/*
+				checking validity associating the date (now or provided by user)
+				to ISO week-based--year and week of week-based-year
+				*/
 				String yearWeek = null;
 				LocalDate date = null;
 
@@ -99,7 +110,8 @@ class Stats implements Serializable {
 
 				yearWeek = "" + weekYear + "_" + week;
 
-				if (!console.readLine("You entered: ml: " + ml + ", percent: " + percent + ", ISOyear_week: " + yearWeek + ", OK to write to DB? (y/n)\n").equals("y"))
+				if (!console.readLine("You entered: ml: " + ml + ", percent: " + percent + ", ISOyear_week: " +
+						yearWeek + ", OK to write to DB? (y/n)\n").equals("y"))
 					break;
 
 
