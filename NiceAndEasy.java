@@ -35,7 +35,7 @@ class Stats implements Serializable {
 			return;
 		} else {
 			try {
-         			ObjectInputStream in = new ObjectInputStream(Files.newInputStream(Paths.get("Stats.ser")));
+         			ObjectInputStream in = new ObjectInputStream(Files.newInputStream(serializedStats));
 				this.thoseWeeks = ((Stats) in.readObject()).thoseWeeks;
          			in.close();
       			} catch (IOException i) {
