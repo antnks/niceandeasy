@@ -14,7 +14,7 @@ import java.time.temporal.IsoFields;
 
 public class NiceAndEasy {
 
-	public static final void main (String... args) {
+	public static final void main (String[] args) {
 		
 		Stats theInstance = new Stats();
 		//main method with infinite loop controlling console input, calculating ethyl alcohol quantity, storing data to DB
