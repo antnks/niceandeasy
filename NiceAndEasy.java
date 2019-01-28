@@ -17,9 +17,12 @@ public class NiceAndEasy {
 	public static final void main (String... args) {
 		
 		Stats theInstance = new Stats();
-		theInstance.enterCalcStore(); //main method with infinite loop controlling console input, calculating ethyl alcohol quantity, storing data to DB
-		theInstance.printStats(); //output DB to console
-		theInstance.serialize(theInstance); //DB is implemented via object serialization
+		//main method with infinite loop controlling console input, calculating ethyl alcohol quantity, storing data to DB
+		theInstance.enterCalcStore();
+		//output DB to console
+		theInstance.printStats();
+		//DB is implemented via object serialization
+		theInstance.serialize(theInstance);
 	}
 }
 
